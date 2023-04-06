@@ -3,11 +3,11 @@
 	"bsonType": "object",
 	"required": ["content","time"],
 	"permission": {
-		".read": true,
-		".create": true,
-		".update": false,
-		".delete": false,
-		".write":true
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true,
+		"write":true
 	},
 	"properties": {
 		"_id": {

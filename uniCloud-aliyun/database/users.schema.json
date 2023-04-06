@@ -2,11 +2,11 @@
   "bsonType": "object",
   "required": ["name","psw","nickname","mood","userImg"],
   "permission": {
-	  ".read": true,
-	  ".create": true,
-	  ".update": false,
-	  ".delete": false,
-	  ".write":true
+	  "read": true,
+	  "create": true,
+	  "update": true,
+	  "delete": true,
+	  "write":true
 	},
   "properties": {
     "_id": {
