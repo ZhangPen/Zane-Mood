@@ -1,0 +1,77 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["content","time"],
+	"permission": {
+		".read": true,
+		".create": true,
+		".update": false,
+		".delete": false,
+		".write":true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"content": {
+		  "bsonType": "string",
+		  "title": "动态",
+		  "description": "用户动态",
+		  "trim": "both"
+		},
+		"time": {
+		  "bsonType": "string",
+		  "title": "日期",
+		  "description": "发布日期",
+		  "trim": "both"
+		},
+		"commentNum": {
+		  "bsonType": "int",
+		  "title": "评论量",
+		  "description": "评论数量",
+		  "trim": "both"
+		},
+		"commentList": {
+		  "bsonType": "array",
+		  "title": "评论列表",
+		  "description": "评论列表",
+		  "trim": "both"
+		},
+		"likeNum": {
+		  "bsonType": "int",
+		  "title": "点赞量",
+		  "description": "点赞数量",
+		  "trim": "both"
+		},
+		"userLike": {
+		  "bsonType": "bool",
+		  "title": "本人点赞",
+		  "description": "本人是否点赞",
+		  "trim": "both"
+		},
+		"userComment": {
+		  "bsonType": "string",
+		  "title": "本人评论",
+		  "description": "本人评论",
+		  "trim": "both"
+		},
+		"isSecret": {
+		  "bsonType": "bool",
+		  "title": "私密",
+		  "description": "本人可见",
+		  "trim": "both"
+		},
+		"userId": {
+		  "bsonType": "string",
+		  "title": "发布人",
+		  "description": "发布人",
+		  "trim": "both"
+		},
+		"nickname": {
+		  "bsonType": "string",
+		  "title": "发布人昵称",
+		  "description": "发布人昵称",
+		  "trim": "both"
+		}
+	}
+}

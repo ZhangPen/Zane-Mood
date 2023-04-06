@@ -1,0 +1,7 @@
+{
+  "name": "publicData",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "bsonType": "object",
+  "required": ["name","psw","nickname","mood","userImg"],
+  "permission": {
+	  ".read": true,
+	  ".create": true,
+	  ".update": false,
+	  ".delete": false,
+	  ".write":true
+	},
+  "properties": {
+    "_id": {
+      "description": "存储文档 ID（用户 ID），系统自动生成"
+    },
+	"userImg": {
+	  "bsonType": "Array",
+	  "title": "头像文件",
+	  "description": "用file类型方便使用uni-file-picker组件"
+	},
+	"nickname": {
+	  "bsonType": "string",
+	  "title": "昵称",
+	  "description": "用户昵称",
+	  "trim": "both"
+	},
+    "name": {
+      "bsonType": "string",
+      "title": "用户名",
+      "description": "用户名，不允许重复",
+      "trim": "both"
+    },
+    "psw": {
+      "bsonType": "password",
+      "title": "密码",
+      "description": "密码，加密存储",
+      "trim": "both"
+    },
+    "mood": {
+      "bsonType": "string",
+      "title": "心情",
+      "description": "心情",
+      "trim": "both"
+    },
+    "sex": {
+      "bsonType": "int",
+      "title": "性别",
+      "description": "用户性别：1 男 2 女 3 保密",
+      "defaultValue": 3,
+      "enum": [
+        {
+          "text": "男",
+          "value": 1
+        },
+        {
+          "text": "女",
+          "value": 2
+        },
+        {
+          "text": "保密",
+          "value": 3
+        }
+      ]
+    }
+  }
+}
