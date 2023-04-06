@@ -1,0 +1,78 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			// uni-ui 规则如下配置
+			"^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+		}
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	    {
+            "path" : "pages/bootPage",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+        },
+        {
+            "path" : "pages/login"
+        }
+        ,{
+            "path" : "pages/index",
+			"enablePullDownRefresh": true,
+			"style": {
+				// "app-plus":{
+				// 	"titleNView":false  //去掉app+h5顶部导航
+				// },
+				"navigationBarTitleText": "Zane Mood"
+			}
+        }
+        ,{
+            "path" : "pages/accountPage",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+        }
+        ,{
+            "path" : "pages/collectPage",
+            "style" : {
+				"navigationBarTitleText": "收藏/点赞列表"
+            }
+        }
+		,{
+		    "path" : "pages/releasePage",
+		    "style" : {
+				"navigationBarTitleText": "发布动态"
+		    }
+		}
+        ,{
+            "path" : "pages/setting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "用户信息修改"
+            }
+            
+        }
+        ,{
+            "path" : "pages/searchPage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "搜索"
+            }
+            
+        }
+		,{
+		    "path" : "pages/detailsPage",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "详情页面"
+		    }
+		    
+		}
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "Zane Mood",
+		"navigationBarBackgroundColor": "#fff"
+	},
+	"uniIdRouter": {}
+}
