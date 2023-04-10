@@ -19,8 +19,7 @@
 		},
 		methods:{
 			getCollectPageList(){
-				this.$uniCloud('userPublish',{userId:this.userInfo._id,type:'get'}).then(res=>{
-					const { result } = res
+				this.$http.post('userPublish',{userId:this.userInfo._id,type:'get'}).then(result=>{
 					let arr = result?.list?.data || [];
 					this.list = arr.filter(k=> !!k.userLike)
 				})

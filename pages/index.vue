@@ -14,7 +14,8 @@
 		<view v-show="!isShowCalendar">
 			<view v-if="mianList.length">
 				<view v-for="(item,key) in mianList" class="listSty" @click="toDetail(item)">
-					<view :style="{'backgroundImage':`url(${item.src})`}" v-if="item.src" class="listImg"></view>
+					<image :src="item.src" alt="pictry" class="listImg" v-if="item.src"/>
+					<!-- <view :style="{'backgroundImage':`url(${item.src})`}" v-if="item.src" class="listImg"></view> -->
 					<view v-if="item.content" class="listText">{{item.content}}</view>
 					<view class="listTime">{{item.time}}</view>
 				</view>
@@ -68,7 +69,9 @@
 				this.selectDate = this.$commonFn.format(new Date(), 'yyyy/MM/dd')
 			}
 			this.userInfo = this.$store.state.userInfo;
-			if(!this.userInfo.name || !this.userInfo.psw || this.$commonFn.isLogin(this.$store.state.loginTime)){
+			if(!this.userInfo.name || !this.userInfo.psw 
+			// || this.$commonFn.isLogin(this.$store.state.loginTime) //3分钟超时
+			){
 				uni.showToast({
 					title: '信息错误,请重新登陆',
 					icon:'error',
@@ -81,10 +84,17 @@
 			}
 			this.getMianList()
 		},
+		onShow() {
+			let pages = getCurrentPages();
+			let currPage = pages[pages.length-1]
+			if(currPage.isRefresh){
+				this.getMianList()
+				currPage.isRefresh = false
+			}
+		},
 		methods: {
 			getMianList(){
-				this.$uniCloud('publicData',{type:'get',time:this.selectDate}).then(res=>{
-					const { result } = res
+				this.$http.post('publicData',{type:'get',time:this.selectDate}).then(result=>{
 					this.mianList = result?.list?.data || []
 				})
 			},
@@ -100,8 +110,7 @@
 				this.selectDate = data.fulldate.replace(/-/ig, '/')
 				this.isShowCalendar = false
 				console.log('查询对应日期数据')
-				this.$uniCloud('publicData',{type:'get',time:this.selectDate}).then(res=>{
-					const { result } = res
+				this.$http.post('publicData',{type:'get',time:this.selectDate}).then(result=>{
 					this.mianList = result?.list?.data || []
 				})
 			},
@@ -136,8 +145,7 @@
 							name:src.name
 						}];
 						console.log('接口==设置头像',_this.userInfo);
-						_this.$uniCloud('upUserInfo', {..._this.userInfo,upKey:'userImg'}).then(res=>{
-							const { result } = res
+						_this.$http.post('upUserInfo',{..._this.userInfo,upKey:'userImg'}).then(result=>{
 							uni.showToast({
 								title: result.msg,
 								icon:'success',

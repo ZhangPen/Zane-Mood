@@ -40,11 +40,20 @@
 		},
 		methods:{
 			setUserImg(img){
-				this.moodImg = [{
-					url: img.tempFiles[0].url,
-					extname: img.tempFiles[0].extname,
-					name: img.tempFiles[0].name,
-				}]
+				const _this = this;
+				uni.chooseImage({
+					count: 1, // 默认9
+					sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+					success(res) {
+						const src = res.tempFiles[0];
+						_this.moodImg = [{
+							url: src.url,
+							extname: src.extname,
+							name: src.name,
+						}]
+					}
+				});
 			},
 			change(){
 				this.isSecret = !this.isSecret;
@@ -66,8 +75,7 @@
 					});
 					return;
 				}
-				this.$uniCloud('userPublish', obj).then(async res=>{
-					const { result } = res
+				this.$http.post('userPublish',obj).then(result=>{
 					uni.showToast({
 						title: result.msg,
 						icon:'success',

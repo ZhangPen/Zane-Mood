@@ -29,11 +29,12 @@
 		</uni-forms>
 		<view v-if="!isLogin">
 			<button class="submitBtn" @click="sumbit(2)" >注册</button>
-			<view class="register">已有账号，点击<text class="registerBtn" @click="onLoginOrRegister(1)"> 登陆</text></view>
+			<view class="register">已有账号，点击<text class="registerBtn" @click="onLoginOrRegister()"> 登陆</text></view>
 		</view>
 		<view v-else>
 			<button class="submitBtn" @click="sumbit(1)" >登陆</button>
-			<view class="register">没有账号，点击<text class="registerBtn" @click="onLoginOrRegister(2)"> 注册</text></view>
+			<view class="register">没有账号，点击<text class="registerBtn" @click="onLoginOrRegister()"> 注册</text></view>
+			<view class="register">忘了密码?你重新注册的算了，懒得写了</view>
 		</view>
 	</view>
 </template>
@@ -79,7 +80,6 @@
 		methods: {
 			setUserImg(img){
 				this.formData.userImg = [{
-					// url:await this.$commonFn.blobToBase64(img.tempFiles[0].url),
 					url:img.tempFiles[0].url,
 					extname: img.tempFiles[0].extname,
 					name: img.tempFiles[0].name,
@@ -95,17 +95,16 @@
 					});
 					return
 				}
-				// this.$store.dispatch('setUserInfo',this.formData)
-				// this.$store.dispatch('setMood',this.mood)
-				// uni.redirectTo({
-				// 	url: 'index'
-				// // });
-				// return
-				// 域名尚未备案
+				if(!this.isLogin && (this.formData.nickname.length<4 || this.formData.name.length<4 || this.formData.psw.length<4)){
+					uni.showModal({
+						content: '昵称/用户/密码你多写几个字不行吗？至少4个字符',
+						showCancel: false
+					});
+					return
+				}
 				const userType = type==1?'sign':'create';
 				const _this = this;
-				this.$uniCloud('users', {...this.formData,userType}).then(res=>{
-					const { result } = res
+				this.$http.post('users',{...this.formData,userType}).then(result=>{
 					uni.showToast({
 						title: result.msg,
 						icon:result.code == 10?'success':'error',
@@ -120,7 +119,7 @@
 					}
 				})
 			},
-			onLoginOrRegister(type){
+			onLoginOrRegister(){
 				this.isLogin = !this.isLogin;
 				this.formData = {
 					userImg:[{

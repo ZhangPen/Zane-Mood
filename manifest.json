@@ -85,7 +85,7 @@
     "mp-weixin" : {
         "appid" : "wx8f6113a80b2c5787",
         "setting" : {
-            "urlCheck" : true,
+            "urlCheck" : false,
             "postcss" : true,
             "minified" : true
         },
@@ -97,6 +97,9 @@
             "scope.userLocation" : {
                 "desc" : "无"
             }
+        },
+        "uniStatistics" : {
+            "enable" : true
         }
     },
     "vueVersion" : "3",
@@ -107,7 +110,7 @@
     "h5" : {
         "title" : "Zane Mood",
         "router" : {
-            "mode" : "hash",
+            "mode" : "history",
             "base" : ""
         },
         "unipush" : {

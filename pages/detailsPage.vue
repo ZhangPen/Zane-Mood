@@ -1,7 +1,12 @@
 <template>
-	<view class="detailSty">
+	<view class="detailSty" v-if="item.src">
 		<image :src="item.src" alt="pictry" class="listImg"/>
 		<view class="txt">{{item.content}}</view>
+		<view class="txt lf">作者：{{item.nickname}}</view>
+		<view class="txt rg">{{item.time}}</view>
+	</view>
+	<view class="detailSty" v-else>
+		<view class="bgTxt">{{item.content}}</view>
 		<view class="txt lf">作者：{{item.nickname}}</view>
 		<view class="txt rg">{{item.time}}</view>
 	</view>
@@ -61,10 +66,11 @@
 				delInfo:{}
 			};
 		},
-		components:{upBelow},
+		components:{
+			upBelow
+		},
 		onLoad(options) {
-			this.$uniCloud('publicData',{...options,type:'get'}).then(res=>{
-				const { result } = res;
+			this.$http.post('publicData',{...options,type:'get'}).then(result=>{
 				this.item = result?.list?.data?.[0] || {}
 			})
 		},
@@ -92,9 +98,8 @@
 					likeNum:num,
 					type:'upDate'
 				}
-				this.$uniCloud('publicData',obj).then(up=>{
-					this.$uniCloud('publicData',{...this.item,type:'get'}).then(res=>{
-						const { result } = res;
+				this.$http.post('publicData',obj).then(op=>{
+					this.$http.post('publicData',{...this.item,type:'get'}).then(result=>{
 						this.item = result?.list?.data?.[0] || {}
 					})
 				})
@@ -111,14 +116,16 @@
 				this.$refs.delDialog.open()
 			},
 			del(){
-				this.$uniCloud('userPublish',{...this.item,type:'remove'}).then(res=>{
-					const { result } = res
+				this.$http.post('userPublish',{...this.item,type:'remove'}).then(result=>{
 					uni.showToast({
 						title: result.msg,
 						icon:'success',
 						mask: true
 					})
 					if(result.code == 10){
+						let pages = getCurrentPages();
+						let prevPage = pages[pages.length-2]
+						prevPage.isRefresh = true
 						uni.navigateBack({
 							delta:1
 						})
@@ -126,7 +133,7 @@
 				})
 			},
 			cancel(){
-				
+				this.$refs.delDialog.close()
 			},
 			commentResult(){
 				const userInfo = Object.assign({},this.userInfo)
@@ -134,9 +141,8 @@
 				let itemCommentList = this.item.commentList || [];
 				itemCommentList.push(userInfo)
 				const obj = Object.assign(this.item,{commentList:itemCommentList})
-				this.$uniCloud('publicData',{...obj,type:'upDate'}).then(up=>{
-					this.$uniCloud('publicData',{...obj,type:'get'}).then(res=>{
-						const { result } = res;
+				this.$http.post('publicData',{...obj,type:'upDate'}).then(op=>{
+					this.$http.post('publicData',{...obj,type:'get'}).then(result=>{
 						this.item = result?.list?.data?.[0] || {}
 						this.commentTxt = ''
 					})
@@ -159,9 +165,8 @@
 					return delInfo._id == k._id && delInfo.comment != k.comment
 				})
 				const obj = Object.assign(this.item,{commentList:itemCommentList})
-				this.$uniCloud('publicData',{...obj,type:'upDate'}).then(up=>{
-					this.$uniCloud('publicData',{...obj,type:'get'}).then(res=>{
-						const { result } = res;
+				this.$http.post('publicData',{...obj,type:'upDate'}).then(op=>{
+					this.$http.post('publicData',{...obj,type:'get'}).then(result=>{
 						this.item = result?.list?.data?.[0] || {}
 					})
 				})
@@ -182,6 +187,11 @@
 		border-bottom: 1px solid #ddd;
 		.listImg{
 			width: 100%;
+		}
+		.bgTxt{
+			text-align: center;
+			font-size: 15px;
+			margin: 50px 0;
 		}
 		.txt{
 			font-size: 13px;
@@ -210,7 +220,7 @@
 			border: 1px dashed #ddd;
 		}
 		.icons{
-			span{
+			span,label{
 				margin-left: 10px;
 			}
 			.uni-icons{

@@ -87,8 +87,7 @@
 						this.baseFormData[key] = oldObj[key]
 					}
 				}
-				_this.$uniCloud('upUserInfo', {..._this.baseFormData,upKey:'all'}).then(res=>{
-					const { result } = res
+				this.$http.post('upUserInfo',{..._this.baseFormData,upKey:'all'}).then(result=>{
 					uni.showToast({
 						title: result.msg,
 						icon:'success',

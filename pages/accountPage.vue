@@ -41,10 +41,17 @@
 			this.userId = option?.userId || this.userInfo._id
 			this.getAccountPageList()
 		},
+		onShow() {
+			let pages = getCurrentPages();
+			let currPage = pages[pages.length-1]
+			if(currPage.isRefresh){
+				this.getAccountPageList()
+				currPage.isRefresh = false
+			}
+		},
 		methods:{
 			getAccountPageList(){
-				this.$uniCloud('userPublish',{userId:this.userId,type:'get'}).then(res=>{
-					const { result } = res
+				this.$http.post('userPublish',{userId:this.userId,type:'get'}).then(result=>{
 					this.list = result?.list?.data || [];
 					this.showList = result?.list?.data || [];
 				})

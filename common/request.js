@@ -1,3 +1,5 @@
+const doMain = 'https://fc-mp-4f151b53-52b1-4351-a7fe-ea103ea5cadf.next.bspapp.com/http/'
+
 export default{
 	//封装uni.request()：
 	request(options){
@@ -20,28 +22,22 @@ export default{
 		})
 	},
 	get(url,data={},options={}){
-		options.url=url;
+		options.url=doMain + url;
 		options.data=data;
 		options.method='get';
 		options.headers={
-			"X-APISpace-Token":"",
-			"Authorization-Type":"apikey",
-			"Access-Control-Allow-Origin":"*"
-			// 'Content-Type': 'application/json',
-			// 'Authorization': 'Bearer token'
+			'Content-Type': 'application/json',
+			'Authorization': 'Bearer token'
 	    }
 		return this.request(options)
 	},
 	post(url,data={},options={}){
-		options.url=url;
+		options.url=doMain + url;
 		options.data=data;
 		options.method='post';
 		options.headers={
-			// "X-APISpace-Token":"",
-			// "Authorization-Type":"apikey",
 			'Content-Type': 'application/json',
 			'Authorization': 'Bearer token',
-			"Access-Control-Allow-Origin":"*"
 		}
 		return this.request(options)
 	}

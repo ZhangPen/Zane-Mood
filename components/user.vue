@@ -34,8 +34,7 @@
 			},
 			setMood() {
 				console.log('==== 设置心情分发储存 ===');
-				this.$uniCloud('upUserInfo', {...this.userInfo,mood:this.newMood,upKey:'mood'}).then(res=>{
-					const { result } = res
+				this.$http.post('upUserInfo',{...this.userInfo,mood:this.newMood,upKey:'mood'}).then(result=>{
 					if(result.code == 10){
 						this.$store.dispatch('setMood',this.newMood)
 					}
@@ -95,11 +94,11 @@
 				margin-top: 10upx;
 			}
 		}
-		uni-view.user_msg{
-			margin-top: 100%;
-			text-align: left;
-			padding-left: 27%;
-		}
+	}
+	.user_msg{
+		margin-top: 70%;
+		text-align: left;
+		padding-left: 25%;
 	}
 	::v-deep .user_li{
 		padding: 10% 0;

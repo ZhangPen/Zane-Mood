@@ -5,11 +5,13 @@ import http from './common/request.js'
 
 // #ifndef VUE3
 import Vue from 'vue'
+
 Vue.config.productionTip = false;
 App.mpType = 'app';
 Vue.prototype.$store = store;
 Vue.prototype.$commonFn = commonFn;
 Vue.prototype.$http = http;
+
 Vue.prototype.$uniCloud = async (name, data) => {
 	uni.showLoading()
 	try{

@@ -19,8 +19,7 @@
 		methods: {
 			search(){
 				const key = this.searchValue;
-				this.$uniCloud('publicData',{type:'search'}).then(res=>{
-					const { result } = res
+				this.$http.post('publicData',{type:'search'}).then(result=>{
 					const resContent = result?.list?.data || [];
 					this.list = resContent.filter(k=>(k.content.indexOf(key)>-1 || k.time.indexOf(key)>-1))
 				})
