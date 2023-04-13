@@ -14,8 +14,8 @@
 		<view v-show="!isShowCalendar">
 			<view v-if="mianList.length">
 				<view v-for="(item,key) in mianList" class="listSty" @click="toDetail(item)">
-					<image :src="item.src" alt="pictry" class="listImg" v-if="item.src"/>
-					<!-- <view :style="{'backgroundImage':`url(${item.src})`}" v-if="item.src" class="listImg"></view> -->
+					<image :src="item.src" class="listImg" v-if="item.src"/>
+					<!-- <view :style="`background-image:url(${item.src})`" class="listImg" v-if="item.src"></view> -->
 					<view v-if="item.content" class="listText">{{item.content}}</view>
 					<view class="listTime">{{item.time}}</view>
 				</view>
@@ -30,6 +30,7 @@
 	</uni-calendar>
 	<!-- 公共按钮 -->
 	<view class="globalBtn">
+		<uni-icons type="closeempty" @click="deleteAll" v-if="userInfo.name=='admin'"></uni-icons>
 		<uni-icons type="compose" @click="operation"></uni-icons>
 		<uni-icons type="calendar-filled" @click="selectionDay"></uni-icons>
 	</view>
@@ -125,6 +126,17 @@
 					url: 'releasePage?date=' + selectDate
 				});
 			},
+			//只有管理员admin账号才显示，用来删除发布过所有数据库信息
+			deleteAll(){
+				this.$http.post('publicData',{type:'delete'}).then(result=>{
+					uni.showToast({
+						title: result.msg,
+						icon:'success',
+						mask: true
+					})
+					this.mianList = []
+				})
+			},
 			selectionDay() {
 				this.isShowCalendar = !this.isShowCalendar
 			},
@@ -195,7 +207,7 @@
 		right: 10px;
 		bottom: 25px;
 		.uni-icons {
-			color: #6374fb !important;
+			color: #646464 !important;
 			font-size: 30px !important;
 			margin: auto 10px;
 		}

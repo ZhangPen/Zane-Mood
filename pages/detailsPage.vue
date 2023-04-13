@@ -15,9 +15,9 @@
 		<view class="delTxt" v-show="item.userId == userInfo._id" @click="deleteDynamic"><uni-icons type='closeempty' color="#ddd"/>删除本条动态</view>
 		<view class="icons">
 			<span><uni-icons type='chat'/>{{showNumFormat(item.commentNum)}}</span>
-			<span>
-				<uni-icons type='heart' @click="beLike" v-if="!item.userLike"/>
-				<uni-icons type='heart-filled' @click="beLike" v-else class="like"/>
+			<span @click="beLike">
+				<uni-icons type='heart'  v-if="!item.userLike"/>
+				<uni-icons type='heart-filled' v-else class="like"/>
 				{{showNumFormat(item.likeNum)}}
 			</span>
 		</view>
@@ -225,6 +225,7 @@
 			}
 			.uni-icons{
 				margin-right: 5px;
+				font-size: 20px;
 			}
 		}
 	}

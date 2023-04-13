@@ -1,7 +1,13 @@
 <template>
 	<view class="textSty">
 		<textarea name="" id="" cols="30" rows="3" placeholder="记录此时此刻mood～" v-model="mood"></textarea>
-		<uni-file-picker limit="1" :imageStyles="imageStyles" disable-preview @select="setUserImg"></uni-file-picker>
+		<uni-file-picker 
+			v-model="moodImg" 
+			fileMediatype="image" 
+			limit="1" 
+			:imageStyles="imageStyles"
+			@success="success" 
+		/>
 		<view class="secret">
 			仅个人主页可见:<switch name="switch" @change="change" style="transform:scale(0.7)"/>
 		</view>
@@ -22,11 +28,7 @@
 						radius: 0,
 					}
 				},
-				moodImg:[{
-					url: '',
-					extname: 'png',
-					name: '默认头像.png',
-				}],
+				moodImg:[],
 				mood:'',
 				time:'',
 				isSecret:false
@@ -39,52 +41,45 @@
 			this.time = options.date;
 		},
 		methods:{
-			setUserImg(img){
-				const _this = this;
-				uni.chooseImage({
-					count: 1, // 默认9
-					sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
-					sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-					success(res) {
-						const src = res.tempFiles[0];
-						_this.moodImg = [{
-							url: src.url,
-							extname: src.extname,
-							name: src.name,
-						}]
-					}
-				});
+			success(img){
+				this.moodImg = [{
+					url: img.tempFiles[0].path,
+					extname:img.tempFiles[0].extname,
+					name:img.tempFiles[0].name
+				}]
 			},
 			change(){
 				this.isSecret = !this.isSecret;
 			},
 			publish(){
-				let obj = {
-					src:this.moodImg[0].url,
-					content:this.mood,
-					time:this.time,
-					isSecret:this.isSecret,
-					userId:this.userInfo._id,
-					nickname:this.userInfo.nickname,
-					type:'add'
-				}
-				if(!obj.src && !obj.content){
-					uni.showModal({
-						content: '动态/图片不能同时为空',
-						showCancel: false
-					});
-					return;
-				}
-				this.$http.post('userPublish',obj).then(result=>{
-					uni.showToast({
-						title: result.msg,
-						icon:'success',
-						mask: true
+				setTimeout(()=>{
+					let obj = {
+						src:this.moodImg.length && this.moodImg[0].url,
+						content:this.mood,
+						time:this.time,
+						isSecret:this.isSecret,
+						userId:this.userInfo._id,
+						nickname:this.userInfo.nickname,
+						type:'add'
+					}
+					if(!obj.src && !obj.content){
+						uni.showModal({
+							content: '动态/图片不能同时为空',
+							showCancel: false
+						});
+						return;
+					}
+					this.$http.post('userPublish',obj).then(result=>{
+						uni.showToast({
+							title: result.msg,
+							icon:'success',
+							mask: true
+						})
+						uni.redirectTo({
+							url: 'index?date=' + obj.time
+						});
 					})
-					uni.redirectTo({
-						url: 'index?date=' + obj.time
-					});
-				})
+				},1000)
 			}
 		},
 		computed: {

@@ -2,6 +2,7 @@
 const db = uniCloud.database()
 //个人状态发布后，同步发布公共频道
 exports.main = async (event, context) => {
+	event = JSON.parse(event.body)
 	const isSecret = event['isSecret'];//是否私密--默认否
 	const collection = db.collection('userPublish')
 	const publicDataCollection = db.collection('publicData')
@@ -23,9 +24,11 @@ exports.main = async (event, context) => {
 			msg:'删除成功'
 		}
 	}else{
-		await collection.add(event)
+		let add = await collection.add(event)
+		let newEvent = await collection.where({_id:add.id}).get()
+		newEvent.data[0].secretId = newEvent.data[0]._id;//同步公共-私密_id
 		if(!isSecret){
-			await publicDataCollection.add(event)//非私密，同步发布公共栏目
+			await publicDataCollection.add(newEvent.data[0])//非私密，同步发布公共栏目
 		}
 		return {
 			code:10,

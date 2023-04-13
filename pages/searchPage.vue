@@ -1,8 +1,7 @@
 <template>
 	<view>
 		<uni-search-bar v-model="searchValue" placeholder="请输入关键词(日期/内容)" clearButton="auto" cancelButton="none" @confirm="search" />
-		<listComponent :list="list" :scrollHeight="'calc(100% - 60px)'" :absTop="'60px'" v-if="list.length"/>
-		<luanqing-empty :show="true" text="有你要的吗？要不试试换换关键词" textColor="#999" v-else/>
+		<listComponent :list="list" :scrollHeight="'calc(100% - 60px)'" :absTop="'60px'" :emptyTxt="'有你要的吗？要不试试换换关键词'"/>
 	</view>
 </template>
 

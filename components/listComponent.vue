@@ -2,14 +2,15 @@
 	<upBelow @pulldown="pulldown" :scrollHeight="scrollHeight" :absTop="absTop">
 		<template v-slot:content>
 			<view class="showList">
-				<view :class="['list',inx%2==0?'marlef':'']" v-for="(k,inx) in list" @click="toDetail(k)">
+				<view :class="['list',inx%2==0?'marlef':'']" v-for="(k,inx) in list" @click="toDetail(k)" v-if="list.length">
 					<view class="imgSty">
 						<image :src="k.src" alt="pictry" class="listImg"/>
 						<uni-icons type="heart-filled" class="like" v-show="k.userLike"></uni-icons>
 					</view>
-					<view class="txt">{{k.content}}</view>
+					<view class="txt" style="min-height: 36px">{{k.content}}</view>
 					<view :class="['txt',k.content?'':'pt']">{{k.time}}</view>
 				</view>
+				<luanqing-empty v-else :show="true" :text="emptyTxt" textColor="#999"></luanqing-empty>
 			</view>
 		</template>
 	</upBelow>
@@ -20,7 +21,7 @@
 	import upBelow from '@/components/up-Below.vue'
 	export default {
 		name: "listComponent",
-		props: ["scrollHeight","absTop","list"],
+		props: ["scrollHeight","absTop","list","emptyTxt"],
 		data() {
 			return {
 			};
@@ -51,7 +52,7 @@
 		width: calc(100% - 40px);
 		.list {
 			width: 49%;
-			max-height: 310px;
+			height: 310px;
 			display: inline-block;
 			float: left;
 			margin-bottom: 20px;
@@ -60,6 +61,7 @@
 		}
 		.listImg {
 			width: 100%;
+			border-bottom: 1px solid #f2f2f2
 		}
 		.marlef {
 			margin-right: 2%;

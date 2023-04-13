@@ -1,5 +1,6 @@
 const db = uniCloud.database()
 exports.main = async (event, context) => {
+	event = JSON.parse(event.body)
 	const upKey = event.upKey;
 	let obj = {};
 	for(let key in event){

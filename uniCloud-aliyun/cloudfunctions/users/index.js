@@ -1,7 +1,6 @@
-const { log } = require("console");
-
 const db = uniCloud.database()
 exports.main = async (event, context) => {
+	event = JSON.parse(event.body)
 	const userType = event.userType; //sign:登陆-create:注册
 	const collection = db.collection('users')
 	// 获取 user 表的集合对象
@@ -39,7 +38,7 @@ exports.main = async (event, context) => {
 			return {
 				code: 10,
 				msg: '注册成功',
-				info:regUser,
+				info:regUser.data[0],
 				time:new Date().getTime()
 			}
 		}

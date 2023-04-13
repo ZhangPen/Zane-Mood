@@ -4,29 +4,44 @@
 			<view>你好,</view>
 			<view>欢迎登陆Zane Mood</view>
 		</view>
-		<uni-forms ref="customForm" :modelValue="formData" :class="[isLogin?'form_top':'']">
-			<uni-forms-item v-if="!isLogin" name="userImg" >
-				<uni-file-picker limit="1" :del-icon="false" disable-preview :imageStyles="imageStyles" 
-					file-mediatype="image" @select="setUserImg" v-model="formData.userImg"
-					class="selectImg"
-				/>
-			</uni-forms-item>
-			<uni-forms-item label="" name="nickname" v-if="!isLogin" required>
-				<input type="text" v-model="formData.nickname" placeholder="请输入昵称"/>
-			</uni-forms-item>
-			<uni-forms-item label="" name="name" required>
-				<input type="text" v-model="formData.name" placeholder="请输入用户名"/>
-			</uni-forms-item>
-			<uni-forms-item label="" name="psw" required>
-				<input type="password" v-model="formData.psw" placeholder="请输入密码"/>
-			</uni-forms-item>
-			<uni-forms-item label="" name="mood" v-if="!isLogin" required>
-				<input type="text" v-model="formData.mood" placeholder="记录此刻心情"/>
-			</uni-forms-item>
-			<uni-forms-item label="" name="sexs" v-if="!isLogin" >
-				<uni-data-checkbox v-model="formData.sex" :localdata="sexs" class="sexLab"/>
-			</uni-forms-item>
-		</uni-forms>
+		<!-- 登陆 wx不支持:style-->
+		<view class="pagePre" v-if="isLogin">
+			<uni-forms :modelValue="formData">
+				<uni-forms-item label="" name="name" required>
+					<input type="text" v-model="formData.name" placeholder="请输入用户名"/>
+				</uni-forms-item>
+				<uni-forms-item label="" name="psw" required>
+					<input type="password" v-model="formData.psw" placeholder="请输入密码"/>
+				</uni-forms-item>
+			</uni-forms>
+		</view>
+		<!-- 注册 所以分开-->
+		<view class="pageNext" v-else>
+			<uni-forms :modelValue="formData">
+				<uni-forms-item name="userImg" >
+					<uni-file-picker limit="1" :del-icon="false" disable-preview :imageStyles="imageStyles" 
+						file-mediatype="image" @select="setUserImg" v-model="formData.userImg"
+						class="selectImg"
+					/>
+					<text class="autoImgText">点击头像更换</text>
+				</uni-forms-item>
+				<uni-forms-item label="" name="nickname" required>
+					<input type="text" v-model="formData.nickname" placeholder="请输入昵称"/>
+				</uni-forms-item>
+				<uni-forms-item label="" name="name" required>
+					<input type="text" v-model="formData.name" placeholder="请输入用户名"/>
+				</uni-forms-item>
+				<uni-forms-item label="" name="psw" required>
+					<input type="password" v-model="formData.psw" placeholder="请输入密码"/>
+				</uni-forms-item>
+				<uni-forms-item label="" name="mood" required>
+					<input type="text" v-model="formData.mood" placeholder="记录此刻心情"/>
+				</uni-forms-item>
+				<uni-forms-item label="" name="sexs">
+					<uni-data-checkbox v-model="formData.sex" :localdata="sexs" class="sexLab"/>
+				</uni-forms-item>
+			</uni-forms>
+		</view>
 		<view v-if="!isLogin">
 			<button class="submitBtn" @click="sumbit(2)" >注册</button>
 			<view class="register">已有账号，点击<text class="registerBtn" @click="onLoginOrRegister()"> 登陆</text></view>
@@ -34,7 +49,7 @@
 		<view v-else>
 			<button class="submitBtn" @click="sumbit(1)" >登陆</button>
 			<view class="register">没有账号，点击<text class="registerBtn" @click="onLoginOrRegister()"> 注册</text></view>
-			<view class="register">忘了密码?你重新注册的算了，懒得写了</view>
+			<view class="register">忘了密码?你重新注册算了，懒得写了</view>
 		</view>
 	</view>
 </template>
@@ -102,6 +117,13 @@
 					});
 					return
 				}
+				if(!this.isLogin && this.formData.name == 'admin'){
+					uni.showModal({
+						content: '不要用这个用户名，留给我',
+						showCancel: false
+					});
+					return
+				}
 				const userType = type==1?'sign':'create';
 				const _this = this;
 				this.$http.post('users',{...this.formData,userType}).then(result=>{
@@ -142,11 +164,7 @@
 		padding: 10% 10%;
 		font-size: 25px;
 	}
-	.form_top{
-		padding-top: 40%;
-	}
 	.uni-forms{
-		padding-top: 30%;
 		input{
 			border-bottom: 1px solid #ddd;
 		}
@@ -158,9 +176,20 @@
 			color: #979797 !important;
 		}
 	}
+	.pagePre{
+		padding-top:40%
+	}
+	.pageNext{
+		padding-top:10%
+	}
+	.autoImgText{
+		text-align: center;
+		color: #979797;
+		display: block;
+		margin: 5px 15px;
+	}
 	::v-deep .uni-file-picker__container{
 		justify-content: center;
-		margin-bottom: 22px;
 	}
 	.submitBtn{
 		background-color: #6374fb;

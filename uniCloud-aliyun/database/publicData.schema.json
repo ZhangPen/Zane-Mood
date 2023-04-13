@@ -11,7 +11,13 @@
 	},
 	"properties": {
 		"_id": {
-			"description": "ID，系统自动生成"
+		  "description": "ID，系统自动生成"
+		},
+		"secretId": {
+		  "bsonType": "string",
+		  "title": "私有动态id",
+		  "description": "私有动态",
+		  "trim": "both"
 		},
 		"content": {
 		  "bsonType": "string",

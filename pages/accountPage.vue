@@ -15,8 +15,7 @@
 			<text :class="['tabType',tabClick==1?'active':'']" @click="changeTab(1)">作品</text>
 			<text :class="['tabType',tabClick==2?'active':'']" @click="changeTab(2)">喜欢</text>
 		</view>
-		<listComponent :scrollHeight="'calc(100% - 240px)'" :absTop="'240px'" :list="showList" v-if="showList.length"/>
-		<luanqing-empty v-else :show="true" text="没有数据哦，要不你多发点咯" textColor="#999"/>
+		<listComponent :scrollHeight="'calc(100% - 240px)'" :absTop="'240px'" :list="showList" :emptyTxt="'没有数据哦，要不你多发点咯'"/>
 	</view>
 	<!-- 预览头像 -->
 	<previewImage :save-btn="false" ref="previewImage" :imgs="[userInfo.userImg[0].url]" :descs="['头像']"/>
